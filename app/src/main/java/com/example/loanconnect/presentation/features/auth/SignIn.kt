@@ -10,16 +10,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,42 +36,39 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.loanconnect.R
 import com.example.loanconnect.presentation.features.auth.components.AuthScreensHeading
 import com.example.loanconnect.presentation.features.auth.components.CustomTopAppBar
+import com.example.loanconnect.presentation.features.utils.ValidationUtils
+import com.example.loanconnect.presentation.navigation.MyNavGraphRoutes
+import com.example.loanconnect.presentation.viewModels.AuthViewModel
 import com.example.loanconnect.ui.theme.LoanConnectTheme
 import com.example.loanconnect.ui.theme.components.OutlinedInputField
 import com.example.loanconnect.ui.theme.components.PrimaryButton
 import com.example.loanconnect.ui.theme.spacing
+import kotlinx.coroutines.launch
 
 
 @OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen() {
+fun SignInScreen(navController: NavHostController, viewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
     var emailError: String? by remember { mutableStateOf(null) }
     var passwordError: String? by remember { mutableStateOf(null) }
-
-    // Function to validate email format
-    fun isValidEmail(email: String): Boolean {
-        val emailRegex = Regex("[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}")
-        return emailRegex.matches(email)
-    }
-
-    // Function to validate password length (currently only checks for minimum length)
-    fun isValidPassword(password: String): Boolean {
-        return password.length >= 6
-    }
-
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
             // CustomTopAppBar
             CustomTopAppBar(onBackClick = { /* Handle back click */ }, actions = {})
 
-        }) { innerPadding ->
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { innerPadding ->
 
         Column(
             modifier = Modifier
@@ -79,16 +79,19 @@ fun SignInScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Welcome Text OR Headings
-            AuthScreensHeading("Welcome to CrakCode Online Learning Platform")
+            AuthScreensHeading(
+                "Welcome back! to LoanConnect",
+                subHeading = "Access funds quickly and easily "
+            )
 
 
             // User Details Text Fields -- Email, Password
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge * 2))
             OutlinedInputField(
                 value = email,
                 onChange = {
                     email = it
-                    emailError = if (isValidEmail(it)) null else "ⓘ Invalid Email"
+                    emailError = if (ValidationUtils.isValidEmail(it)) null else "ⓘ Invalid Email"
                 },
                 label = "Email",
                 placeholder = {
@@ -113,13 +116,13 @@ fun SignInScreen() {
 
 
             // Password Text Field
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
             OutlinedInputField(
                 value = password,
                 onChange = {
                     password = it
                     passwordError =
-                        if (isValidPassword(it)) null else "ⓘ Password least 6 characters"
+                        if (ValidationUtils.isValidPassword(it)) null else "ⓘ Password least 6 characters"
                 },
                 label = "Password",
                 placeholder = {
@@ -175,9 +178,21 @@ fun SignInScreen() {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge * 2))
             PrimaryButton(
                 label = "Sign In",
-                onClick = {},
+                onClick = {
+                    if ((emailError == null && passwordError == null && email.isNotEmpty() && password.isNotEmpty())
+                    ) {
+                        navController.navigate(MyNavGraphRoutes.SignUpScreen.route)
+                    } else {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "Please Fill All Fields",
+                                actionLabel = "Dismiss",
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = emailError == null && passwordError == null && email.isNotEmpty() && password.isNotEmpty(),
             )
 
 
@@ -207,7 +222,14 @@ fun SignInScreen() {
             }
             Text(
                 annotatedText,
-                Modifier.clickable { /* Handle text click */ },
+                Modifier.clickable {
+                    navController.navigate(MyNavGraphRoutes.SignUpScreen.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                },
             )
 
         }
@@ -220,6 +242,5 @@ fun SignInScreen() {
 @Composable
 fun SignInScreenPreview() {
     LoanConnectTheme {
-        SignInScreen()
     }
 }
