@@ -18,6 +18,7 @@ lifecycleRuntimeCompose = "2.8.4"
 
 retrofit = "2.11.0"
 converterGson = "2.11.0"
+converterScalars = "2.11.0"
 
 arrowFxCoroutines = "1.2.0"
 arrow = "1.2.4"
@@ -48,6 +49,7 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converterScalars" }
 
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrowFxCoroutines" }

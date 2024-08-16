@@ -1,4 +1,4 @@
-package com.example.loanconnect.presentation.features.auth.components
+package com.example.loanconnect.ui.theme.components
 
 
 import androidx.compose.foundation.layout.size
@@ -20,7 +20,7 @@ import com.example.loanconnect.R
 @Composable
 fun CustomTopAppBar(
     title: String = "",
-    onBackClick: () -> Unit,
+    onClick: () -> Unit,
     actions: @Composable () -> Unit,
     titleModifier: Modifier = Modifier,
     backIconModifier: Modifier = Modifier,
@@ -35,7 +35,7 @@ fun CustomTopAppBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = { onBackClick() }) {
+            IconButton(onClick = { onClick() }) {
                 Icon(
                     painter = backIcon,
                     contentDescription = "Back",

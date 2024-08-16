@@ -3,7 +3,9 @@ package com.example.loanconnect.ui.theme
 import androidx.compose.ui.graphics.Color
 
 
-internal val primaryLight = Color(0xFF58B234)
+//internal val primaryLight = Color(0xFF58B234)
+//internal val primaryLight = Color(0xFF5f0f40)
+internal val primaryLight = Color(0xFF0077b6)
 internal val onPrimaryLight = Color(0xFFFFFFFF)
 internal val primaryContainerLight = Color(0xFF64BF3F)
 internal val onPrimaryContainerLight = Color(0xFF072500)
