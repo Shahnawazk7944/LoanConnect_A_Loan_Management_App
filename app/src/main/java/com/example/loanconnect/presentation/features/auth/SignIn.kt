@@ -1,3 +1,5 @@
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +21,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -39,11 +43,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.loanconnect.R
 import com.example.loanconnect.presentation.features.auth.components.AuthScreensHeading
-import com.example.loanconnect.presentation.features.auth.components.CustomTopAppBar
 import com.example.loanconnect.presentation.features.utils.ValidationUtils
 import com.example.loanconnect.presentation.navigation.MyNavGraphRoutes
+import com.example.loanconnect.presentation.states.AppEvents
+import com.example.loanconnect.presentation.states.AuthEvents
+import com.example.loanconnect.presentation.states.AuthStates
 import com.example.loanconnect.presentation.viewModels.AuthViewModel
 import com.example.loanconnect.ui.theme.LoanConnectTheme
+import com.example.loanconnect.ui.theme.components.CustomTopAppBar
+import com.example.loanconnect.ui.theme.components.LoadingDialog
 import com.example.loanconnect.ui.theme.components.OutlinedInputField
 import com.example.loanconnect.ui.theme.components.PrimaryButton
 import com.example.loanconnect.ui.theme.spacing
@@ -52,20 +60,29 @@ import kotlinx.coroutines.launch
 
 @OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen(navController: NavHostController, viewModel: AuthViewModel) {
-    var email by remember { mutableStateOf("") }
+fun SignInScreen(
+    navController: NavHostController,
+    viewModel: AuthViewModel,
+    state: AuthStates
+) {
+    var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
-    var emailError: String? by remember { mutableStateOf(null) }
+    var usernameError: String? by remember { mutableStateOf(null) }
     var passwordError: String? by remember { mutableStateOf(null) }
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
 
     Scaffold(
         topBar = {
             // CustomTopAppBar
-            CustomTopAppBar(onBackClick = { /* Handle back click */ }, actions = {})
-
+            CustomTopAppBar(
+                onClick = {
+                    navController.navigateUp()
+                },
+                actions = {})
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPadding ->
@@ -78,6 +95,9 @@ fun SignInScreen(navController: NavHostController, viewModel: AuthViewModel) {
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            //loading dialog when signing in
+            LoadingDialog(isLoading = state.loading)
+
             // Welcome Text OR Headings
             AuthScreensHeading(
                 "Welcome back! to LoanConnect",
@@ -88,15 +108,16 @@ fun SignInScreen(navController: NavHostController, viewModel: AuthViewModel) {
             // User Details Text Fields -- Email, Password
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge * 2))
             OutlinedInputField(
-                value = email,
+                value = username,
                 onChange = {
-                    email = it
-                    emailError = if (ValidationUtils.isValidEmail(it)) null else "ⓘ Invalid Email"
+                    username = it
+                    usernameError =
+                        if (ValidationUtils.isValidUserName(it)) null else "ⓘ Username least 3 characters"
                 },
-                label = "Email",
+                label = "Username",
                 placeholder = {
                     Text(
-                        text = "Enter Your Email",
+                        text = "Enter Your Username",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -104,13 +125,13 @@ fun SignInScreen(navController: NavHostController, viewModel: AuthViewModel) {
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(R.drawable.email_icon),
-                        contentDescription = "email icon",
+                        painter = painterResource(R.drawable.user_icon),
+                        contentDescription = "User icon",
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(18.dp)
                     )
                 },
-                error = if (emailError != null) emailError else null
+                error = if (usernameError != null) usernameError else null
 
             )
 
@@ -122,7 +143,7 @@ fun SignInScreen(navController: NavHostController, viewModel: AuthViewModel) {
                 onChange = {
                     password = it
                     passwordError =
-                        if (ValidationUtils.isValidPassword(it)) null else "ⓘ Password least 6 characters"
+                        if (ValidationUtils.isValidPassword(it)) null else "ⓘ Password least 12 characters"
                 },
                 label = "Password",
                 placeholder = {
@@ -179,9 +200,9 @@ fun SignInScreen(navController: NavHostController, viewModel: AuthViewModel) {
             PrimaryButton(
                 label = "Sign In",
                 onClick = {
-                    if ((emailError == null && passwordError == null && email.isNotEmpty() && password.isNotEmpty())
+                    if ((usernameError == null && passwordError == null && username.isNotEmpty() && password.isNotEmpty())
                     ) {
-                        navController.navigate(MyNavGraphRoutes.SignUpScreen.route)
+                        viewModel.onEvent(AuthEvents.SignIn(username, password))
                     } else {
                         coroutineScope.launch {
                             snackbarHostState.showSnackbar(
@@ -194,7 +215,26 @@ fun SignInScreen(navController: NavHostController, viewModel: AuthViewModel) {
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
-
+            LaunchedEffect(state) {
+                if (state.isLoggedIn) {
+                    Toast.makeText(context, "SignIn successful!", Toast.LENGTH_SHORT).show()
+                    navController.navigate(MyNavGraphRoutes.HomeScreen.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = false
+                        }
+                    }
+                } else if (state.showError) {
+                    Log.d("AuthViewModel", "Error block in SignInScreen")
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = state.error.toString(),
+                            actionLabel = "Dismiss",
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                    viewModel.onEvent(AuthEvents.ErrorShown(false, null))
+                }
+            }
 
             // "Don’t have account?" text with "Sign In" link
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
@@ -233,6 +273,7 @@ fun SignInScreen(navController: NavHostController, viewModel: AuthViewModel) {
             )
 
         }
+
     }
 
 }

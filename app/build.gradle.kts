@@ -73,6 +73,7 @@ dependencies {
 
     // Retrofit
     implementation(libs.retrofit)
+    implementation(libs.converter.scalars)
     implementation(libs.converter.gson)
 
     //Coil
