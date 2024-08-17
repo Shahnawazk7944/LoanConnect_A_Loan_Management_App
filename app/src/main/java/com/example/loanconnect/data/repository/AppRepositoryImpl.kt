@@ -2,26 +2,28 @@ package com.example.loanconnect.data.repository
 
 import arrow.core.Either
 import com.example.loanconnect.data.remote.ApiService
-import com.example.loanconnect.domain.model.AuthFailedResponse
-import com.example.loanconnect.domain.model.AuthResponse
+import com.example.loanconnect.domain.model.AppFailedResponse
+import com.example.loanconnect.domain.model.AppResponse
 import com.example.loanconnect.domain.model.LoanRequest
-import com.example.loanconnect.domain.model.SignInRequest
-import com.example.loanconnect.domain.model.SignUpRequest
 import com.example.loanconnect.domain.repository.AppRepository
-import com.example.loanconnect.domain.repository.AuthRepository
 import javax.inject.Inject
 
-class AuthRepositoryImpl @Inject constructor(private val apiService: ApiService) : AppRepository {
+class AppRepositoryImpl @Inject constructor(private val apiService: ApiService) : AppRepository {
 
 
-    override suspend fun applyForLoan(loanRequest: LoanRequest): Either<AuthFailedResponse, AuthResponse> {
+    override suspend fun applyForLoan(loanRequest: LoanRequest): Either<AppFailedResponse, AppResponse> {
         return try {
 
             val response = apiService.applyForLoan(loanRequest)
-            Either.Right(response)
+
+            return if (response.code() == 201) {
+                Either.Right(response.body()!!)
+            } else {
+                Either.Left(AppFailedResponse(message = response.message()))
+            }
 
         } catch (e: Exception) {
-            Either.Left(AuthFailedResponse(message = "User Not Found or ${e.message}"))
+            Either.Left(AppFailedResponse(message = "User Not Found or ${e.message}"))
         }
     }
 

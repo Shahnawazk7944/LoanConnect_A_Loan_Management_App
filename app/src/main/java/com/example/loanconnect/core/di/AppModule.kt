@@ -18,33 +18,25 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
-//    @Provides
-//    fun provideGson(): Gson {
-//        return GsonBuilder()
-//            .serializeNulls() // Example customization
-//            .create()
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun providesOkHttpClient(): OkHttpClient {
-//        return OkHttpClient.Builder().build()
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit {
-//        return Retrofit.Builder()
-//            .baseUrl(BASE_URL)
-//            .client(okHttpClient)
-//            .addConverterFactory(GsonConverterFactory.create(gson))
-//            .build()
-//    }
+    @Provides
+    fun provideGson(): Gson {
+        return GsonBuilder()
+            .create()
+        //idk what is wrong here
+    }
+
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun providesOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -53,38 +45,18 @@ class AppModule {
     @Singleton
     fun provideAuthApiService(retrofit: Retrofit): ApiService =
         retrofit.create(ApiService::class.java)
-}
 
-
-//@Module
-//@InstallIn(SingletonComponent::class)
-//class AppModule {
-//
-//    @Provides
-//    fun provideGson(): Gson {
-//        return Gson()
-//    }
-//
 //    @Provides
 //    @Singleton
-//    fun providesOkHttpClient(
-//    ): OkHttpClient {
-//        return OkHttpClient.Builder().build()
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+//    fun provideRetrofit(): Retrofit {
 //        return Retrofit.Builder()
 //            .baseUrl(BASE_URL)
-//            .client(okHttpClient)
 //            .addConverterFactory(GsonConverterFactory.create())
 //            .build()
 //    }
-//
 //
 //    @Provides
 //    @Singleton
 //    fun provideAuthApiService(retrofit: Retrofit): ApiService =
 //        retrofit.create(ApiService::class.java)
-//}
+}

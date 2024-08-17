@@ -41,7 +41,7 @@ fun ApplyLoanDialog(
     var durationError: String? by remember { mutableStateOf(null) }
 
     AlertDialog(
-        onDismissRequest = { onCancel(false) },
+        onDismissRequest = { },
         title = { Text("Apply For Loan") },
         text = {
             Column {

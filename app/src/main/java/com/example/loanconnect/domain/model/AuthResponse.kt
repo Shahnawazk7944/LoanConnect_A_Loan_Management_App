@@ -6,3 +6,7 @@ data class AuthResponse(
     @SerializedName("message")
     val message: String
 )
+
+data class AppResponse(
+    val message: String
+)

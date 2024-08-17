@@ -38,7 +38,10 @@ fun MyNavGraph(
         composable(
             route = MyNavGraphRoutes.HomeScreen.route,
         ) {
-            HomeScreen(navController,authViewModel,appState)
+            HomeScreen(
+                navController = navController, authViewModel = authViewModel,
+                appState = appState, appViewModel = appViewModel, authState = authState
+            )
         }
     }
 }
