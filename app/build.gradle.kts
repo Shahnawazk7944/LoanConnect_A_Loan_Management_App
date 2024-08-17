@@ -82,6 +82,9 @@ dependencies {
     //Material extended icon
     implementation(libs.androidx.material.icons.extended.android)
 
+    //For Permission
+    implementation(libs.runtime.permission)
+
 
     // Dagger Hilt
     // Requirements for Dagger hilt with KSP

@@ -15,7 +15,7 @@ class AuthRepositoryImpl @Inject constructor(private val apiService: ApiService)
         return try {
 
             val response = apiService.signUpRequest(signUpRequest)
-            Either.Right(response)
+            return Either.Right(response)
 
         } catch (e: Exception) {
             Either.Left(AuthFailedResponse(message = "User Already Exists or ${e.message}"))
@@ -26,7 +26,7 @@ class AuthRepositoryImpl @Inject constructor(private val apiService: ApiService)
         return try {
 
             val response = apiService.signInRequest(signInRequest)
-            Either.Right(response)
+            return Either.Right(response)
 
         } catch (e: Exception) {
             Either.Left(AuthFailedResponse(message = "Invalid Details or ${e.message}"))

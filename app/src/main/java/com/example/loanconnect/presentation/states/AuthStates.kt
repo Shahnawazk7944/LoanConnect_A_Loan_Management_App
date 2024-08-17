@@ -6,5 +6,6 @@ data class AuthStates(
     val error: String? = null,
     val isLoggedIn: Boolean = false,
     val username: String? = null,
-    val contactNumber: String? = null,
+    val contactNumber: String = "0101010107",
+ //   val contactNumber: String = "0101010101",
 )
