@@ -10,6 +10,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.loanconnect.presentation.features.profile.StoreProfileScreen
 import com.example.loanconnect.presentation.viewModels.AppViewModel
 import com.example.loanconnect.presentation.viewModels.AuthViewModel
 
@@ -25,7 +26,7 @@ fun MyNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = MyNavGraphRoutes.HomeScreen.route
+        startDestination = MyNavGraphRoutes.ProfileScreen.route
     ) {
         composable(route = MyNavGraphRoutes.SignUpScreen.route) {
             SignUpScreen(navController, authViewModel, authState)
@@ -41,6 +42,13 @@ fun MyNavGraph(
             HomeScreen(
                 navController = navController, authViewModel = authViewModel,
                 appState = appState, appViewModel = appViewModel, authState = authState
+            )
+        }
+        composable(
+            route = MyNavGraphRoutes.ProfileScreen.route,
+        ) {
+            StoreProfileScreen(
+                navController = navController,appState = appState, appViewModel = appViewModel, authState = authState
             )
         }
     }

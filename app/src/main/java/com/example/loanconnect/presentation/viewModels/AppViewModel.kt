@@ -3,6 +3,8 @@ package com.example.loanconnect.presentation.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.loanconnect.domain.model.LoanRequest
+import com.example.loanconnect.domain.model.UpdateMobileNumberRequest
+import com.example.loanconnect.domain.model.UpdateUsernameRequest
 import com.example.loanconnect.domain.repository.AppRepository
 import com.example.loanconnect.presentation.states.AppEvents
 import com.example.loanconnect.presentation.states.AppStates
@@ -40,6 +42,21 @@ class AppViewModel @Inject constructor(
                     it.copy(showError = event.showError, error = event.removeError)
                 }
             }
+
+            is AppEvents.UpdateNewMobileNumber -> {
+                updateMobileNumber(
+                    UpdateMobileNumberRequest(
+                        mobile = event.mobileNumberAsId,
+                        new_mobile = event.newData
+                    ))
+            }
+            is AppEvents.UpdateNewUsername -> {
+                updateNewUsername(
+                    UpdateUsernameRequest(
+                        mobile = event.mobileNumberAsId,
+                        username = event.newData
+                    ))
+            }
         }
     }
 
@@ -61,6 +78,65 @@ class AppViewModel @Inject constructor(
                     _appStates.update {
                         it.copy(
                             applyingForLoan = false,
+                            showError = true,
+                            error = failedResponse.message
+                        )
+                    }
+
+                }
+
+        }
+
+    }
+
+
+    private fun updateNewUsername(updateUsernameRequest: UpdateUsernameRequest) {
+        _appStates.update {
+            it.copy(updatingNewUsername = true)
+        }
+        viewModelScope.launch {
+            val result =
+                appRepository.updateUsername(updateUsernameRequest).onRight { successResponse ->
+                    _appStates.update {
+                        it.copy(
+                            updatingNewUsername = false,
+                            updatingNewUsernameSuccessMessage = successResponse.message
+                        )
+                    }
+                }.onLeft { failedResponse ->
+
+                    _appStates.update {
+                        it.copy(
+                            updatingNewUsername = false,
+                            showError = true,
+                            error = failedResponse.message
+                        )
+                    }
+
+                }
+
+        }
+
+    }
+
+    private fun updateMobileNumber(updateMobileNumberRequest: UpdateMobileNumberRequest) {
+        _appStates.update {
+            it.copy(updatingNewMobileNumber = true)
+        }
+        viewModelScope.launch {
+            val result =
+                appRepository.updateMobileNumber(updateMobileNumberRequest).onRight { successResponse ->
+                    _appStates.update {
+                        it.copy(
+                            updatingNewMobileNumber = false,
+                            updatingNewMobileNumberSuccessMessage = successResponse.message
+                        )
+                    }
+                }.onLeft { failedResponse ->
+
+                    _appStates.update {
+                        it.copy(
+                            updatingNewMobileNumber = false,
                             showError = true,
                             error = failedResponse.message
                         )
