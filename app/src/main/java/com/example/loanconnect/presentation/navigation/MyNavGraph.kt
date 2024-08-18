@@ -26,7 +26,7 @@ fun MyNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = MyNavGraphRoutes.ProfileScreen.route
+        startDestination = MyNavGraphRoutes.HomeScreen.route
     ) {
         composable(route = MyNavGraphRoutes.SignUpScreen.route) {
             SignUpScreen(navController, authViewModel, authState)
