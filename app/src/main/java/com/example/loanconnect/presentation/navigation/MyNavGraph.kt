@@ -8,9 +8,16 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.example.loanconnect.presentation.features.admin.AdminScreen
+import com.example.loanconnect.presentation.features.admin.AdminScreenCheckAllLoanApplications
+import com.example.loanconnect.presentation.features.admin.AdminScreenCheckAllUsers
+import com.example.loanconnect.presentation.features.admin.AdminScreenCheckUserLoans
 import com.example.loanconnect.presentation.features.profile.StoreProfileScreen
+import com.example.loanconnect.presentation.viewModels.AdminViewModel
 import com.example.loanconnect.presentation.viewModels.AppViewModel
 import com.example.loanconnect.presentation.viewModels.AuthViewModel
 
@@ -21,12 +28,14 @@ fun MyNavGraph(
 ) {
     val authViewModel: AuthViewModel = hiltViewModel()
     val appViewModel: AppViewModel = hiltViewModel()
+    val adminViewModel: AdminViewModel = hiltViewModel()
     val authState by authViewModel.authStates.collectAsStateWithLifecycle()
     val appState by appViewModel.appStates.collectAsStateWithLifecycle()
+    val adminState by adminViewModel.adminStates.collectAsStateWithLifecycle()
 
     NavHost(
         navController = navController,
-        startDestination = MyNavGraphRoutes.HomeScreen.route
+        startDestination = MyNavGraphRoutes.AdminScreen.route
     ) {
         composable(route = MyNavGraphRoutes.SignUpScreen.route) {
             SignUpScreen(navController, authViewModel, authState)
@@ -48,8 +57,44 @@ fun MyNavGraph(
             route = MyNavGraphRoutes.ProfileScreen.route,
         ) {
             StoreProfileScreen(
-                navController = navController,appState = appState, appViewModel = appViewModel, authState = authState
+                navController = navController,appState = appState,
+                appViewModel = appViewModel, authState = authState
             )
+        }
+        composable(
+            route = MyNavGraphRoutes.AdminScreen.route,
+        ) {
+            AdminScreen(
+                navController = navController,
+                adminViewModel = adminViewModel, adminState = adminState
+            )
+        }
+        composable(
+            route = MyNavGraphRoutes.AdminScreenCheckAllUsers.route,
+        ) {
+            AdminScreenCheckAllUsers(
+                navController = navController, adminState = adminState
+            )
+        }
+        composable(
+            route = MyNavGraphRoutes.AdminScreenCheckAllLoanApplications.route,
+        ) {
+            AdminScreenCheckAllLoanApplications(
+                navController = navController, adminState = adminState
+            )
+        }
+        composable(
+            route = MyNavGraphRoutes.AdminScreenCheckUserLoans.route,
+            arguments = listOf(
+                navArgument("userIndex") { type = NavType.StringType }
+            )
+        ) { navBackStackEntry ->
+            val userIndex = navBackStackEntry.arguments?.getString("userIndex")
+            if (userIndex != null) {
+                AdminScreenCheckUserLoans(
+                    navController = navController, adminState = adminState
+                )
+            }
         }
     }
 }

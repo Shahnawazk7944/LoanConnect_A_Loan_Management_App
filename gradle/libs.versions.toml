@@ -29,6 +29,8 @@ materialIconsExtendedAndroid = "1.6.8"
 
 runtimePermission = "0.35.1-alpha"
 
+parserJsoup = "1.18.1"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -52,6 +54,8 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converterScalars" }
+parser-jsoup = { module = "org.jsoup:jsoup", version.ref = "parserJsoup" }
+
 
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrowFxCoroutines" }

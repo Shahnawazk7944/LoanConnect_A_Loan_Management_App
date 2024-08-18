@@ -85,6 +85,9 @@ dependencies {
     //For Permission
     implementation(libs.runtime.permission)
 
+    //Jsoup Parser
+    implementation(libs.parser.jsoup)
+
 
     // Dagger Hilt
     // Requirements for Dagger hilt with KSP

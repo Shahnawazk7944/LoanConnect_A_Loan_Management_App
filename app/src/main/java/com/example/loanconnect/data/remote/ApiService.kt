@@ -8,8 +8,10 @@ import com.example.loanconnect.domain.model.SignUpRequest
 import com.example.loanconnect.domain.model.UpdateMobileNumberRequest
 import com.example.loanconnect.domain.model.UpdateUsernameRequest
 import com.example.loanconnect.domain.model.UploadPhotoRequest
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -38,4 +40,8 @@ interface ApiService {
     @POST("/upload_photo")
     @Headers("Content-Type: application/json", "Accept: application/json", "Connection: close", "Accept-Encoding: gzip, deflate, br")
     suspend fun uploadPhoto(@Body request: UploadPhotoRequest): AppResponse
+
+    @GET("/admin/view_user_data")
+    @Headers("Content-Type: application/json", "Accept: text/html, charset=utf-8", "Connection: close", "Accept-Encoding: gzip, deflate, br")
+    suspend fun getUsersData(): ResponseBody
 }
