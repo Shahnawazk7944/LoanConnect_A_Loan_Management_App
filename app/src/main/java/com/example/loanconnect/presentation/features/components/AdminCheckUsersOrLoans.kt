@@ -1,6 +1,5 @@
 package com.example.loanconnect.presentation.features.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,11 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
 fun AdminCheckUsersOrLoans(painter: Painter, content: String, onClick: () -> Unit) {
@@ -37,7 +33,7 @@ fun AdminCheckUsersOrLoans(painter: Painter, content: String, onClick: () -> Uni
             .padding(horizontal = 0.dp)
             .height(80.dp)
             .fillMaxWidth()
-            .clickable{
+            .clickable {
                 onClick()
             },
         shape = RoundedCornerShape(20.dp),

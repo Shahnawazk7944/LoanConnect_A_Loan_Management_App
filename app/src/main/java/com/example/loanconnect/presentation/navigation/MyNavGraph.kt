@@ -35,7 +35,7 @@ fun MyNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = MyNavGraphRoutes.AdminScreen.route
+        startDestination = MyNavGraphRoutes.AdminScreenCheckAllUsers.route
     ) {
         composable(route = MyNavGraphRoutes.SignUpScreen.route) {
             SignUpScreen(navController, authViewModel, authState)

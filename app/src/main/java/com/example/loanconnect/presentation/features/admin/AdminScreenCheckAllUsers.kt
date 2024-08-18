@@ -27,6 +27,7 @@ import com.example.loanconnect.ui.theme.components.CustomTopAppBar
 import com.example.loanconnect.ui.theme.components.LoadingDialog
 import com.example.loanconnect.ui.theme.spacing
 import com.example.loanconnect.R
+import com.example.loanconnect.presentation.features.components.AdminCheckAllUsersComponents
 
 
 @Composable
@@ -61,20 +62,13 @@ fun AdminScreenCheckAllUsers(
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
 
-            AdminCheckUsersOrLoans(
-                painter = painterResource(R.drawable.all_users_icon),
-                content = "Check All Users Data",
-                onClick = {
-
-                }
-            )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
-            AdminCheckUsersOrLoans(
-                painter = painterResource(R.drawable.give_loans_icon),
-                content = "Check All Loan Applications",
-                onClick = {
-
-                }
+            AdminCheckAllUsersComponents(
+                profilePhoto = painterResource(R.drawable.all_users_icon),
+                userName = "Userdsffjdskfsjffsdfj",
+                contactNumber = "18595654564454454",
+                onProfileClick = {},
+                checkAppliedLoans = {}
             )
 
 
