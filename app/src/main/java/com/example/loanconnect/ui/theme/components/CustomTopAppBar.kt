@@ -19,28 +19,21 @@ import com.example.loanconnect.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTopAppBar(
-    title: String = "",
+    modifier: Modifier = Modifier,
+    title: @Composable () -> Unit = { Text(text = "", style = MaterialTheme.typography.titleMedium,) },
     onClick: () -> Unit,
     actions: @Composable () -> Unit,
-    titleModifier: Modifier = Modifier,
-    backIconModifier: Modifier = Modifier,
     backIcon: Painter = painterResource(R.drawable.arrow_back),
 ) {
     TopAppBar(
-        title = {
-            Text(
-                title,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = titleModifier,
-            )
-        },
+        title = title,
         navigationIcon = {
             IconButton(onClick = { onClick() }) {
                 Icon(
                     painter = backIcon,
                     contentDescription = "Back",
                     tint = MaterialTheme.colorScheme.secondary,
-                    modifier = backIconModifier.size(24.dp)
+                    modifier = modifier.size(24.dp)
                 )
             }
         },

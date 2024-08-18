@@ -7,6 +7,7 @@ import com.example.loanconnect.domain.model.SignInRequest
 import com.example.loanconnect.domain.model.SignUpRequest
 import com.example.loanconnect.domain.model.UpdateMobileNumberRequest
 import com.example.loanconnect.domain.model.UpdateUsernameRequest
+import com.example.loanconnect.domain.model.UploadPhotoRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Headers
@@ -33,4 +34,8 @@ interface ApiService {
     @POST("/update_profile")
     @Headers("Content-Type: application/json", "Accept: application/json", "Connection: close", "Accept-Encoding: gzip, deflate, br")
     suspend fun updateMobileNumber(@Body request: UpdateMobileNumberRequest): Result<AppResponse>
+
+    @POST("/upload_photo")
+    @Headers("Content-Type: application/json", "Accept: application/json", "Connection: close", "Accept-Encoding: gzip, deflate, br")
+    suspend fun uploadPhoto(@Body request: UploadPhotoRequest): AppResponse
 }

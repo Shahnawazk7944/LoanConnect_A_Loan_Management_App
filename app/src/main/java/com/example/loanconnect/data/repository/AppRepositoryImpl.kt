@@ -8,6 +8,7 @@ import com.example.loanconnect.domain.model.AppResponse
 import com.example.loanconnect.domain.model.LoanRequest
 import com.example.loanconnect.domain.model.UpdateMobileNumberRequest
 import com.example.loanconnect.domain.model.UpdateUsernameRequest
+import com.example.loanconnect.domain.model.UploadPhotoRequest
 import com.example.loanconnect.domain.repository.AppRepository
 import javax.inject.Inject
 
@@ -35,9 +36,12 @@ class AppRepositoryImpl @Inject constructor(private val apiService: ApiService) 
 
             val response = apiService.updateUsername(updateUsernameRequest)
             return if (response.isFailure) {
-                Log.d("AuthViewModel", "errorInTryBlock<Top>: ${response.exceptionOrNull()?.message}")
+                Log.d(
+                    "AuthViewModel",
+                    "errorInTryBlock<Top>: ${response.exceptionOrNull()?.message}"
+                )
                 Either.Left(AppFailedResponse(message = "User Not Found or ${response.exceptionOrNull()?.message}"))
-            }else{
+            } else {
                 Either.Right(response.getOrNull()!!)
             }
 
@@ -53,7 +57,7 @@ class AppRepositoryImpl @Inject constructor(private val apiService: ApiService) 
             val response = apiService.updateMobileNumber(updateMobileNumberRequest)
             return if (response.isFailure) {
                 Either.Left(AppFailedResponse(message = "User Not Found or ${response.exceptionOrNull()?.message}"))
-            }else{
+            } else {
                 Either.Right(response.getOrNull()!!)
             }
 
@@ -62,5 +66,14 @@ class AppRepositoryImpl @Inject constructor(private val apiService: ApiService) 
         }
     }
 
+    override suspend fun uploadPhoto(uploadPhotoRequest: UploadPhotoRequest): Either<AppFailedResponse, AppResponse> {
+        return try {
+            val response = apiService.uploadPhoto(uploadPhotoRequest)
+            Either.Right(response)
+
+        } catch (e: Exception) {
+            Either.Left(AppFailedResponse(message = "User Not Found or ${e.message}"))
+        }
+    }
 
 }
