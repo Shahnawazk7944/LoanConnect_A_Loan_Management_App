@@ -52,7 +52,7 @@ fun AdminScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LoadingDialog(adminState.loadingAdminData)
-            // Welcome Text OR Headings
+
             AuthScreensHeading(
                 "LoanConnect Admin Panel",
                 subHeading = "Access funds quickly and easily "
@@ -60,7 +60,7 @@ fun AdminScreen(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
 
-            if (false) {
+            if (adminState.usersData.isEmpty()) {
                 Button(onClick = { adminViewModel.onEvent(AdminEvents.GetUserData(true)) }) {
                     Text(text = "Get User Data")
                 }

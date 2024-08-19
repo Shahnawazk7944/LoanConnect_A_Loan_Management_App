@@ -159,15 +159,15 @@ class AppViewModel @Inject constructor(
                         }
                     }.onLeft { failedResponse ->
 
-                    _appStates.update {
-                        it.copy(
-                            updatingNewMobileNumber = false,
-                            showError = true,
-                            error = failedResponse.message
-                        )
-                    }
+                        _appStates.update {
+                            it.copy(
+                                updatingNewMobileNumber = false,
+                                showError = true,
+                                error = failedResponse.message
+                            )
+                        }
 
-                }
+                    }
 
         }
 

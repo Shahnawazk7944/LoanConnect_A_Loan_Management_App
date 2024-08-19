@@ -6,6 +6,7 @@ sealed class MyNavGraphRoutes(val route: String) {
     data object SignInScreen : MyNavGraphRoutes(route = "signInScreen")
     data object SignUpScreen : MyNavGraphRoutes(route = "signUpScreen")
     data object ProfileScreen : MyNavGraphRoutes(route = "profileScreen")
+    data object LoansHistoryScreen : MyNavGraphRoutes(route = "loansHistoryScreen")
     data object AdminScreen : MyNavGraphRoutes(route = "adminScreen")
     data object AdminScreenCheckAllUsers :
         MyNavGraphRoutes(route = "adminScreenCheckAllUsers")

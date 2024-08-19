@@ -1,6 +1,5 @@
 package com.example.loanconnect.presentation.viewModels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.loanconnect.domain.model.SignInRequest
@@ -75,7 +74,6 @@ class AuthViewModel @Inject constructor(
                             contactNumber = signUpRequest.mobile
                         )
                     }
-                    Log.d("AuthViewModel", "Sign up Status<VM>: ${authSuccessResponse.message}")
                 }.onLeft { authFailedResponse ->
 
                     _authStates.update {
@@ -86,17 +84,8 @@ class AuthViewModel @Inject constructor(
                         )
                     }
 
-                    Log.d(
-                        "AuthViewModel",
-                        "Show Error : ${authStates.value.showError} - error: ${authStates.value.error}"
-                    )
-                    Log.d("AuthViewModel", "Sign up Status: fa ${authStates.value.error}")
                 }
-
-            Log.d("AuthViewModel", "Just for test in VM-launch")
         }
-        Log.d("AuthViewModel", "Just for test in outside VM-launch")
-
     }
 
     private fun signIn(signInRequest: SignInRequest) {
@@ -109,7 +98,6 @@ class AuthViewModel @Inject constructor(
                     _authStates.update {
                         it.copy(loading = false, isLoggedIn = true)
                     }
-                    Log.d("AuthViewModel", "Sign up Status<VM>: ${authSuccessResponse.message}")
                 }.onLeft { authFailedResponse ->
 
                     _authStates.update {
@@ -120,16 +108,9 @@ class AuthViewModel @Inject constructor(
                         )
                     }
 
-                    Log.d(
-                        "AuthViewModel",
-                        "Show Error : ${authStates.value.showError} - error: ${authStates.value.error}"
-                    )
-                    Log.d("AuthViewModel", "Sign up Status: fa ${authStates.value.error}")
                 }
 
-            Log.d("AuthViewModel", "Just for test in VM-launch")
         }
-        Log.d("AuthViewModel", "Just for test in outside VM-launch")
 
     }
 }

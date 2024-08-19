@@ -27,13 +27,13 @@ class AdminRepositoryImpl @Inject constructor(private val apiService: ApiService
             for (userRow in userRows) {
                 val userCells = userRow.select("td")
 
-                if (userCells.size >= 8) { // User row (with or without loan)
+                if (userCells.size >= 8) {
                     currentUserData?.let {
-                        it.loans = userLoans // Assign loans to the previous user
-                        usersData.add(it) // Add the previous user to the list
+                        it.loans = userLoans
+                        usersData.add(it)
                     }
 
-                    // Start a new user
+
                     val userId = userCells[0].text().toIntOrNull() ?: 0
                     val username = userCells[1].text()
                     val mobile = userCells[2].text()
@@ -51,18 +51,18 @@ class AdminRepositoryImpl @Inject constructor(private val apiService: ApiService
                         messages,
                         mutableListOf()
                     )
-                    userLoans = mutableListOf() // Reset loans for the new user
+                    userLoans = mutableListOf()
 
-                    if (userCells.size == 11) { // Loan entry in user row
+                    if (userCells.size == 11) {
                         val loanId = userCells[7].text().toIntOrNull() ?: 0
                         val loanAmount = userCells[8].text().toDoubleOrNull() ?: 0.0
                         val duration = userCells[9].text()
                         val loanStatus = userCells[10].text()
                         userLoans.add(UserLoans(loanId, loanAmount, duration, loanStatus))
                     } else if (userCells[7].text() == "No Loans") {
-                        // No loans for this user, no need to add anything to userLoans
+                        // No loans for this user
                     }
-                } else if (userCells.size == 5 && currentUserData != null) { // Multiple loan entry
+                } else if (userCells.size == 5 && currentUserData != null) {
                     val loanId = userCells[1].text().toIntOrNull() ?: 0
                     val loanAmount = userCells[2].text().toDoubleOrNull() ?: 0.0
                     val duration = userCells[3].text()
@@ -71,7 +71,7 @@ class AdminRepositoryImpl @Inject constructor(private val apiService: ApiService
                 }
             }
 
-// Add the last user to the list
+
             currentUserData?.let {
                 it.loans = userLoans
                 usersData.add(it)

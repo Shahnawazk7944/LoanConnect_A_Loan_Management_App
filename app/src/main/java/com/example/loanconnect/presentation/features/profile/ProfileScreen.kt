@@ -2,7 +2,6 @@ package com.example.loanconnect.presentation.features.profile
 
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -154,7 +153,7 @@ fun StoreProfileScreen(
                             appViewModel.onEvent(
                                 AppEvents.UploadPhoto(
                                     base64String = base64String,
-                                    mobileNumberAsId = authState.contactNumber
+                                    mobileNumberAsId = authState.contactNumber.toString()
                                 )
                             )
                         }
@@ -198,7 +197,7 @@ fun StoreProfileScreen(
                         Toast.LENGTH_SHORT
                     ).show()
 
-                } else if (appState.showError) {
+                } else if (appState.showError && !appState.error.isNullOrEmpty()) {
                     Toast.makeText(context, appState.error, Toast.LENGTH_SHORT).show()
                     appViewModel.onEvent(AppEvents.ErrorShown(false, null))
                 }
@@ -267,7 +266,7 @@ fun StoreProfileScreen(
                         appViewModel.onEvent(
                             AppEvents.UpdateNewUsername(
                                 newData = newUsername,
-                                mobileNumberAsId = authState.contactNumber
+                                mobileNumberAsId = authState.contactNumber.toString()
                             )
                         )
 
@@ -277,6 +276,19 @@ fun StoreProfileScreen(
                     },
                     states = appState
                 )
+                LaunchedEffect(appState) {
+                    if (appState.updatedNewUsernameSuccessMessage != null) {
+                        showUpdateUsernameDialog = false
+                        Toast.makeText(
+                            context,
+                            appState.updatedNewUsernameSuccessMessage,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else if (appState.showError) {
+                        Toast.makeText(context, appState.error, Toast.LENGTH_SHORT).show()
+                        appViewModel.onEvent(AppEvents.ErrorShown(false, null))
+                    }
+                }
             }
 
 
@@ -287,17 +299,32 @@ fun StoreProfileScreen(
                         appViewModel.onEvent(
                             AppEvents.UpdateNewMobileNumber(
                                 newData = newMobileNumber,
-                                mobileNumberAsId = authState.contactNumber
+                                mobileNumberAsId = authState.contactNumber.toString()
                             )
                         )
+
                     },
                     onCancel = { canceled ->
                         showUpdateMobileNumberDialog = canceled
                     },
                     states = appState
                 )
-            }
 
+                LaunchedEffect(appState) {
+                    if (appState.updatedNewMobileNumberSuccessMessage != null) {
+                        showUpdateMobileNumberDialog = false
+                        Toast.makeText(
+                            context,
+                            appState.updatedNewMobileNumberSuccessMessage,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else if (appState.showError) {
+                        Toast.makeText(context, appState.error, Toast.LENGTH_SHORT).show()
+                        appViewModel.onEvent(AppEvents.ErrorShown(false, null))
+                    }
+                }
+
+            }
         }
     }
 }
