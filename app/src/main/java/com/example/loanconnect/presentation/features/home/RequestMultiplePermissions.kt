@@ -10,6 +10,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun RequestMultiplePermissions(
+    // this logic im thinking to implement in the home screen for now i will leave it here
 //    onContactsPermissionGranted: @Composable () -> Unit,
 //    onCallLogPermissionGranted: @Composable () -> Unit,
 //    onSmsPermissionGranted: @Composable () -> Unit,

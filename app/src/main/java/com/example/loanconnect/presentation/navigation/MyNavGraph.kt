@@ -16,6 +16,7 @@ import com.example.loanconnect.presentation.features.admin.AdminScreen
 import com.example.loanconnect.presentation.features.admin.AdminScreenCheckAllLoanApplications
 import com.example.loanconnect.presentation.features.admin.AdminScreenCheckAllUsers
 import com.example.loanconnect.presentation.features.admin.AdminScreenCheckUserLoans
+import com.example.loanconnect.presentation.features.admin.LoanHistoryScreen
 import com.example.loanconnect.presentation.features.profile.StoreProfileScreen
 import com.example.loanconnect.presentation.viewModels.AdminViewModel
 import com.example.loanconnect.presentation.viewModels.AppViewModel
@@ -35,7 +36,7 @@ fun MyNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = MyNavGraphRoutes.AdminScreenCheckAllUsers.route
+        startDestination = MyNavGraphRoutes.SignInScreen.route
     ) {
         composable(route = MyNavGraphRoutes.SignUpScreen.route) {
             SignUpScreen(navController, authViewModel, authState)
@@ -50,15 +51,27 @@ fun MyNavGraph(
         ) {
             HomeScreen(
                 navController = navController, authViewModel = authViewModel,
-                appState = appState, appViewModel = appViewModel, authState = authState
+                appState = appState, appViewModel = appViewModel, authState = authState,
+
+
             )
         }
         composable(
             route = MyNavGraphRoutes.ProfileScreen.route,
         ) {
             StoreProfileScreen(
-                navController = navController,appState = appState,
+                navController = navController, appState = appState,
                 appViewModel = appViewModel, authState = authState
+            )
+        }
+        composable(
+            route = MyNavGraphRoutes.LoansHistoryScreen.route,
+        ) {
+            LoanHistoryScreen(
+                navController = navController, adminState = adminState,
+                authStates = authState,
+                //this is just for testing just test the loan history of user
+                adminViewModel = adminViewModel
             )
         }
         composable(
@@ -92,7 +105,9 @@ fun MyNavGraph(
             val userIndex = navBackStackEntry.arguments?.getString("userIndex")
             if (userIndex != null) {
                 AdminScreenCheckUserLoans(
-                    navController = navController, adminState = adminState
+                    navController = navController,
+                    adminState = adminState,
+                    userIndex = userIndex.toInt()
                 )
             }
         }

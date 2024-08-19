@@ -44,10 +44,12 @@ import com.example.loanconnect.presentation.features.auth.components.AuthScreens
 import com.example.loanconnect.presentation.features.components.ApplyLoanDialog
 import com.example.loanconnect.presentation.features.home.RequestMultiplePermissions
 import com.example.loanconnect.presentation.navigation.MyNavGraphRoutes
+import com.example.loanconnect.presentation.states.AdminEvents
 import com.example.loanconnect.presentation.states.AppEvents
 import com.example.loanconnect.presentation.states.AppStates
 import com.example.loanconnect.presentation.states.AuthEvents
 import com.example.loanconnect.presentation.states.AuthStates
+import com.example.loanconnect.presentation.viewModels.AdminViewModel
 import com.example.loanconnect.presentation.viewModels.AppViewModel
 import com.example.loanconnect.presentation.viewModels.AuthViewModel
 import com.example.loanconnect.ui.theme.LoanConnectTheme
@@ -65,7 +67,7 @@ fun HomeScreen(
     appViewModel: AppViewModel,
     authViewModel: AuthViewModel,
     appState: AppStates,
-    authState: AuthStates
+    authState: AuthStates,
 ) {
     var showApplyLoanDialog by remember { mutableStateOf(false) }
 
@@ -134,7 +136,7 @@ fun HomeScreen(
                 },
                 actions = {
                     IconButton(modifier = Modifier.scale(1.2f), onClick = {
-                        navController.navigate(MyNavGraphRoutes.ProfileScreen.route)
+                        navController.navigate(MyNavGraphRoutes.LoansHistoryScreen.route)
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.lo),
@@ -185,7 +187,7 @@ fun HomeScreen(
 
 
             }
-            LaunchedEffect(appState) {
+            LaunchedEffect(appState.appliedForLoanSuccessMessage) {
                 if (appState.appliedForLoanSuccessMessage != null) {
                     showApplyLoanDialog = false
                     Toast.makeText(
@@ -194,7 +196,7 @@ fun HomeScreen(
                         Toast.LENGTH_SHORT
                     ).show()
 
-                } else if (appState.showError) {
+                } else if (appState.showError && !appState.error.isNullOrEmpty()) {
                     Toast.makeText(context, appState.error, Toast.LENGTH_SHORT).show()
                     appViewModel.onEvent(AppEvents.ErrorShown(false, null))
                 }
@@ -205,7 +207,7 @@ fun HomeScreen(
                     onApply = { amount, duration ->
                         appViewModel.onEvent(
                             AppEvents.ApplyForLoan(
-                                contactNumber = authState.contactNumber,
+                                contactNumber = authState.contactNumber.toString(),
                                 amount = amount.toInt(),
                                 duration = duration.toInt()
                             )

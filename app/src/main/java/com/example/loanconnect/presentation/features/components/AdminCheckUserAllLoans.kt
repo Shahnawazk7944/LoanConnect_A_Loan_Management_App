@@ -1,7 +1,6 @@
 package com.example.loanconnect.presentation.features.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -26,27 +24,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.loanconnect.R
-import com.example.loanconnect.ui.theme.LoanConnectTheme
 
 
 @Composable
-fun AdminCheckAllUsersComponents(
-    profilePhoto: Painter,
-    userName: String,
-    contactNumber: String,
-    onProfileClick: () -> Unit,
-    checkAppliedLoans: () -> Unit,
+fun AdminCheckUserAllLoans(
+    loanIcon: Painter,
+    loanId: String,
+    loanAmount: String,
+    loanDuration: String,
+    loanStatus: String,
 ) {
     Card(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(8.dp)
             .padding(horizontal = 0.dp)
             .height(80.dp)
             .fillMaxWidth(),
@@ -75,82 +67,95 @@ fun AdminCheckAllUsersComponents(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painter = profilePhoto,
+                    painter = loanIcon,
                     contentDescription = null,
                     modifier = Modifier
                         .size(50.dp)
-                        .padding(3.dp)
-                        .clickable { onProfileClick() },
+                        .padding(3.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             Column(
                 verticalArrangement = Arrangement.Top,
                 modifier = Modifier.fillMaxHeight()
             ) {
                 Text(
-                    text = "Username :",
+                    text = "Loan Id :",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.secondaryContainer,
                     modifier = Modifier
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = userName,
+                    text = loanId,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onTertiary,
                     maxLines = 2,
                     modifier = Modifier.width(70.dp)
                 )
             }
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             Column(
                 verticalArrangement = Arrangement.Top,
                 modifier = Modifier.fillMaxHeight()
             ) {
                 Text(
-                    text = "Contact Number :",
+                    text = "Loan Amount :",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.secondaryContainer,
                     modifier = Modifier
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = contactNumber,
+                    text = loanAmount,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onTertiary,
                     maxLines = 2,
                     modifier = Modifier.width(70.dp)
                 )
             }
-            Spacer(modifier = Modifier.width(10.dp))
-            Button(
-                modifier = Modifier.scale(1.2f).padding(2.dp),
-                onClick = { checkAppliedLoans() },
-                shape = RoundedCornerShape(10.dp)) {
+            Spacer(modifier = Modifier.width(8.dp))
+            Column(
+                verticalArrangement = Arrangement.Top,
+                modifier = Modifier.fillMaxHeight()
+            ) {
                 Text(
-                    text = "Applied Loans",
-                    fontSize = 5.sp,
-                    style = MaterialTheme.typography.bodySmall,
+                    text = "Loan Duration :",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    modifier = Modifier
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = loanDuration,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onTertiary,
-                    modifier = Modifier.scale(1.8f)
+                    maxLines = 2,
+                    modifier = Modifier.width(70.dp)
                 )
             }
-        }
-    }
-}
+            Spacer(modifier = Modifier.width(8.dp))
+            Column(
+                verticalArrangement = Arrangement.Top,
+                modifier = Modifier.fillMaxHeight()
+            ) {
+                Text(
+                    text = "Loan Status :",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    modifier = Modifier
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = loanStatus,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    maxLines = 2,
+                    modifier = Modifier.width(70.dp)
+                )
+            }
 
-@Preview(showBackground = true)
-@Composable
-fun AdminCheckAllUsersComponentsPreview() {
-    LoanConnectTheme {
-        AdminCheckAllUsersComponents(
-            profilePhoto = painterResource(R.drawable.all_users_icon),
-            userName = "Users Data",
-            contactNumber = "1859565456",
-            onProfileClick = {},
-            checkAppliedLoans = {}
-        )
+        }
     }
 }

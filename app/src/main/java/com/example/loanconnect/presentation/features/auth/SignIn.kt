@@ -77,7 +77,7 @@ fun SignInScreen(
 
     Scaffold(
         topBar = {
-            // CustomTopAppBar
+
             CustomTopAppBar(
                 onClick = {
                     navController.navigateUp()
@@ -95,17 +95,16 @@ fun SignInScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            //loading dialog when signing in
+
             LoadingDialog(isLoading = state.loading)
 
-            // Welcome Text OR Headings
             AuthScreensHeading(
                 "Welcome back! to LoanConnect",
                 subHeading = "Access funds quickly and easily "
             )
 
 
-            // User Details Text Fields -- Email, Password
+
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge * 2))
             OutlinedInputField(
                 value = username,
@@ -136,7 +135,7 @@ fun SignInScreen(
             )
 
 
-            // Password Text Field
+
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
             OutlinedInputField(
                 value = password,
@@ -177,14 +176,14 @@ fun SignInScreen(
             )
 
 
-            // ... Row layout ... for Terms and Conditions Checkbox and Forgot Password Text
+
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.End
             ) {
-                // Forgot Password Text
+
                 Text(
                     text = "Forgot Password",
                     style = MaterialTheme.typography.labelSmall,
@@ -195,7 +194,7 @@ fun SignInScreen(
             }
 
 
-            // Sign In Button
+
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge * 2))
             PrimaryButton(
                 label = "Sign In",
@@ -236,7 +235,7 @@ fun SignInScreen(
                 }
             }
 
-            // "Don’t have account?" text with "Sign In" link
+
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
             val annotatedText = buildAnnotatedString {
                 withStyle(
@@ -264,6 +263,41 @@ fun SignInScreen(
                 annotatedText,
                 Modifier.clickable {
                     navController.navigate(MyNavGraphRoutes.SignUpScreen.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                },
+            )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+            val annotatedAdminText = buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontFamily = MaterialTheme.typography.bodyLarge.fontFamily,
+                        fontWeight = MaterialTheme.typography.bodyLarge.fontWeight,
+                    )
+                ) {
+                    append("Have access to admin panel? ")
+                }
+                withStyle(
+                    style = SpanStyle(
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontFamily = MaterialTheme.typography.titleMedium.fontFamily,
+                        fontWeight = MaterialTheme.typography.titleMedium.fontWeight
+                    )
+                ) {
+                    append("Admin Login")
+                }
+            }
+            Text(
+                annotatedAdminText,
+                Modifier.clickable {
+                    navController.navigate(MyNavGraphRoutes.AdminScreen.route) {
                         popUpTo(navController.graph.startDestinationId) {
                             inclusive = false
                         }

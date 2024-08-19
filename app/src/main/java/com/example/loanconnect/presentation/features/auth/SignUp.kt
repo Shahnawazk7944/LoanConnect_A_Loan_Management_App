@@ -93,10 +93,10 @@ fun SignUpScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            //loading dialog when singing up
+
             LoadingDialog(isLoading = state.loading)
 
-            // Welcome Text OR Headings
+
             AuthScreensHeading("Welcome to LoanConnect ", subHeading = "Online Loan Platform")
 
 
@@ -129,7 +129,7 @@ fun SignUpScreen(
             )
 
 
-            // Password Text Field
+
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
             OutlinedInputField(
                 value = password,
@@ -200,7 +200,7 @@ fun SignUpScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
             )
 
-            // Sign Up Button
+
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge * 2))
             PrimaryButton(
                 label = "Sign Up",

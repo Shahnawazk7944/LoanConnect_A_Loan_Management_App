@@ -44,7 +44,6 @@ fun ProfileDetailsRowComp(
             modifier = Modifier
                 .size(40.dp)
                 .clip(RoundedCornerShape(30.dp))
-                //.background(Color.DarkGray)
                 .weight(1f)
                 .padding(5.dp)
         )

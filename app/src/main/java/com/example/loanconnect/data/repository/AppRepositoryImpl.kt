@@ -36,17 +36,13 @@ class AppRepositoryImpl @Inject constructor(private val apiService: ApiService) 
 
             val response = apiService.updateUsername(updateUsernameRequest)
             return if (response.isFailure) {
-                Log.d(
-                    "AuthViewModel",
-                    "errorInTryBlock<Top>: ${response.exceptionOrNull()?.message}"
-                )
                 Either.Left(AppFailedResponse(message = "User Not Found or ${response.exceptionOrNull()?.message}"))
             } else {
                 Either.Right(response.getOrNull()!!)
             }
 
         } catch (e: Exception) {
-            Log.d("AuthViewModel", "errorInTryBlock $e")
+
             Either.Left(AppFailedResponse(message = "User Not Found or $e"))
         }
     }
