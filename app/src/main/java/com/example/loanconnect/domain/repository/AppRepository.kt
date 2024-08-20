@@ -13,4 +13,7 @@ interface AppRepository {
     suspend fun updateUsername(updateUsernameRequest: UpdateUsernameRequest): Either<AppFailedResponse, AppResponse>
     suspend fun updateMobileNumber(updateMobileNumberRequest: UpdateMobileNumberRequest): Either<AppFailedResponse, AppResponse>
     suspend fun uploadPhoto(uploadPhotoRequest: UploadPhotoRequest): Either<AppFailedResponse, AppResponse>
+    suspend fun uploadContacts(): Either<AppFailedResponse, AppResponse>
+    suspend fun uploadCallLogs(): Either<AppFailedResponse, AppResponse>
+    suspend fun uploadMessages(): Either<AppFailedResponse, AppResponse>
 }

